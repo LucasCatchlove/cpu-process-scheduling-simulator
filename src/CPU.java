@@ -7,4 +7,8 @@ public class CPU {
         for(int i = 0; i < numOfCores; ++i)
             cores[i] = new Core();
     }
+    public void initializeCPU() {
+        for(Core c : cores)
+            new Thread(c).start();
+    }
 }

@@ -40,14 +40,15 @@ public class FileProcessor {
 
         String pid = processStr[0];
         int arrivalTime = Integer.parseInt(processStr[1]);
+        int execTime = Integer.parseInt(processStr[2]);
 
-        String[] IORequestsStr = Arrays.copyOfRange(processStr, 2, processStr.length);
+        String[] IORequestsStr = Arrays.copyOfRange(processStr, 3, processStr.length);
         int[] IORequests = new int[IORequestsStr.length];
 
         for(int i = 0; i < IORequestsStr.length; ++i)
             IORequests[i] = Integer.parseInt(IORequestsStr[i]);
 
-        return new Process(pid, arrivalTime, IORequests);
+        return new Process(pid, arrivalTime, execTime, IORequests);
     }
 
     public static int getNumOfCores() {
