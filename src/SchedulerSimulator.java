@@ -26,8 +26,10 @@ public class SchedulerSimulator {
 
         CPU Cpu = new CPU(numOfCores);
 
-        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
-        FCFS.schedule();
+        //Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
+        //FCFS.schedule();
+        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
+        SJF.schedule();
     }
 
     public static Scheduler getCurrentScheduler() {

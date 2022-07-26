@@ -16,6 +16,8 @@ public class FirstComeFirstServed extends Scheduler {
     }
 
     public void schedule() {
+        System.out.println("********** First Come First Served ********");
+
         while (CPU.clock < 100) {
             System.out.println("\n---------- @ time " + CPU.clock + " ----------");
             try {
