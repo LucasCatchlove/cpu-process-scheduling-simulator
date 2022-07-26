@@ -5,8 +5,8 @@ import java.util.List;
 
 public class FirstComeFirstServed extends Scheduler {
     int numProcesses;
-    Queue<Process> readyQueue = new PriorityQueue<>(new ProcessComparator());
-    Queue<Process> waitingQueue = new PriorityQueue<>(new ProcessComparator());
+    Queue<Process> readyQueue = new PriorityQueue<>(new ProcessArrivalComparator());
+    Queue<Process> waitingQueue = new PriorityQueue<>(new ProcessArrivalComparator());
 
 
     public FirstComeFirstServed(List<Process> processes, CPU Cpu) {
@@ -16,10 +16,10 @@ public class FirstComeFirstServed extends Scheduler {
     }
 
     public void schedule() {
-        while (CPU.clock < 200) {
-            System.out.println("---------- @ time " + CPU.clock + " ----------");
+        while (CPU.clock < 100) {
+            System.out.println("\n---------- @ time " + CPU.clock + " ----------");
             try {
-                Thread.sleep(50);
+                Thread.sleep(CPU.clockSpeed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -30,20 +30,18 @@ public class FirstComeFirstServed extends Scheduler {
                     Cpu.getNextFreeCore().addProcess(waitingQueue.remove(), CPU.clock);
                 else break;
 
-
             while (!readyQueue.isEmpty() && readyQueue.peek().getArrivalTime() == CPU.clock) {
                 if (Cpu.getNextFreeCore() != null) {
                     Cpu.getNextFreeCore().addProcess(readyQueue.remove(), CPU.clock);
                 } else waitingQueue.add(readyQueue.remove());
             }
 
-
             CPU.clock++;
         }
     }
 }
 
-class ProcessComparator implements Comparator<Process> {
+class ProcessArrivalComparator implements Comparator<Process> {
     @Override
     public int compare(Process o1, Process o2) {
         if (o1.getArrivalTime() > o2.getArrivalTime()) return 1;

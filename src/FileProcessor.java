@@ -42,10 +42,10 @@ public class FileProcessor {
         int execTime = Integer.parseInt(processStr[2]);
 
         String[] IORequestsStr = Arrays.copyOfRange(processStr, 3, processStr.length);
-        int[] IORequests = new int[IORequestsStr.length];
+        List<Integer> IORequests = new ArrayList<>(IORequestsStr.length);
 
         for(int i = 0; i < IORequestsStr.length; ++i)
-            IORequests[i] = Integer.parseInt(IORequestsStr[i]);
+            IORequests.add(Integer.parseInt(IORequestsStr[i]));
 
         return new Process(pid, arrivalTime, execTime, IORequests);
     }

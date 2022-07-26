@@ -1,13 +1,14 @@
 import java.util.Arrays;
+import java.util.List;
 
 public class Process {
     private final String pid;
     private final int arrivalTime;
     private final int execTime;
-    private final int[] IORequests;
+    private final List<Integer> IORequests;
     private int currentIORequest = 0;
 
-    public Process(String pid, int arrivalTime, int execTime, int[] IORequests) {
+    public Process(String pid, int arrivalTime, int execTime, List<Integer> IORequests) {
         this.pid = pid;
         this.arrivalTime = arrivalTime;
         this.IORequests = IORequests;
@@ -24,7 +25,7 @@ public class Process {
         return arrivalTime;
     }
 
-    public int[] getIORequests() {
+    public List<Integer> getIORequests() {
         return IORequests;
     }
 
