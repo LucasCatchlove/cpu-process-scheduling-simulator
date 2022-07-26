@@ -12,7 +12,6 @@ public class FileProcessor {
     private static int numOfCores;
     private static final List<Process> processes = new ArrayList<Process>();
 
-    //"main" method of this class
     public static void parseFile(String fileName) throws IOException {
         try {
             File file = new File(fileName);

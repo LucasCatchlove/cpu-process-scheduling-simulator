@@ -1,33 +1,38 @@
 import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class SchedulerSimulator {
 
 
-    private static int numOfCores;
-    private static List<Process> processes;
     private static Scheduler CurrentScheduler;
 
-    public static void main(String[] args) throws IOException {
-        FileProcessor.parseFile("input.txt");
 
-        //System.out.println(FileProcessor.getNumOfCores());
-        numOfCores = FileProcessor.getNumOfCores();
-        //System.out.println(FileProcessor.getProcesses());
-        processes = FileProcessor.getProcesses();
+    public static void main(String[] args) {
+        System.out.println("********* Schedule Simulator ********");
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Enter a time quantum value: ");
+        //int timeQ = kb.nextInt();
+        int timeQ = 2;
+        try {
+            FileProcessor.parseFile("input.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int numOfCores = FileProcessor.getNumOfCores();
+        List<Process> processes = FileProcessor.getProcesses();
 
         CPU Cpu = new CPU(numOfCores);
-        Cpu.initializeCPU();
 
-        //add algo selection here
-
-
-
-
+        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
+        FCFS.schedule();
     }
 
     public static Scheduler getCurrentScheduler() {
         return CurrentScheduler;
     }
+
+
 }

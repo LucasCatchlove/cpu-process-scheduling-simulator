@@ -1,9 +1,12 @@
 import java.util.List;
 
 abstract class Scheduler {
-    private List<Process> processes;
 
-    public boolean processesRemaining() {
-        return true;
+    CPU Cpu;
+
+    public Scheduler(CPU Cpu) {
+        this.Cpu = Cpu;
     }
+
+    public abstract void schedule();
 }

@@ -12,7 +12,6 @@ public class Process {
         this.arrivalTime = arrivalTime;
         this.IORequests = IORequests;
         this.execTime = execTime;
-
     }
 
     public int getExecTime() { return execTime; }
@@ -35,5 +34,10 @@ public class Process {
 
     public void setCurrentIORequest(int currentIORequest) {
         this.currentIORequest = currentIORequest;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + pid + " arrival time: " + arrivalTime + ")";
     }
 }
