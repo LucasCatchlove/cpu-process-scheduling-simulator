@@ -25,16 +25,16 @@ public class FirstComeFirstServed extends Scheduler {
             }
             if (CPU.clock > 0) Cpu.updateStateOfCores(CPU.clock);
 
+            while (!waitingQueue.isEmpty())
+                if (Cpu.getNextFreeCore() != null)
+                    Cpu.getNextFreeCore().addProcess(waitingQueue.remove(), CPU.clock);
+                else break;
+
+
             while (!readyQueue.isEmpty() && readyQueue.peek().getArrivalTime() == CPU.clock) {
-
                 if (Cpu.getNextFreeCore() != null) {
-                    if (!waitingQueue.isEmpty())
-                        Cpu.getNextFreeCore().addProcess(waitingQueue.remove(), CPU.clock);
-                    else
-                        Cpu.getNextFreeCore().addProcess(readyQueue.remove(), CPU.clock);
-                }
-                else waitingQueue.add(readyQueue.remove());
-
+                    Cpu.getNextFreeCore().addProcess(readyQueue.remove(), CPU.clock);
+                } else waitingQueue.add(readyQueue.remove());
             }
 
 

@@ -23,14 +23,19 @@ public class Core {
         return isAssignedProcess;
     }
 
-    public boolean processIsComplete(int clock) {
+    public void processIsComplete(int clock) {
         if(currentProcess != null && clock == startTime + currentProcess.getExecTime()) {
             System.out.println("Process " + currentProcess.getPid() + " on core " + id + " has completed");
             isAssignedProcess = false;
             currentProcess = null;
-            return true;
         }
-        return false;
+    }
+
+    public void ioIsScheduled(int clock) {
+
+
+
+
     }
 
     public int getId() {

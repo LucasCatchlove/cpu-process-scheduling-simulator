@@ -20,7 +20,8 @@ public class CPU {
     }
 
     public void updateStateOfCores(int clock) {
-        for(Core c : cores)
+        for(Core c : cores) {
             c.processIsComplete(clock);
+        }
     }
 }

@@ -1,10 +1,10 @@
 import java.util.Arrays;
 
 public class Process {
-    private String pid;
-    private int arrivalTime;
-    private int execTime;
-    private int[] IORequests;
+    private final String pid;
+    private final int arrivalTime;
+    private final int execTime;
+    private final int[] IORequests;
     private int currentIORequest = 0;
 
     public Process(String pid, int arrivalTime, int execTime, int[] IORequests) {
@@ -36,8 +36,4 @@ public class Process {
         this.currentIORequest = currentIORequest;
     }
 
-    @Override
-    public String toString() {
-        return "(" + pid + " arrival time: " + arrivalTime + ")";
-    }
 }
