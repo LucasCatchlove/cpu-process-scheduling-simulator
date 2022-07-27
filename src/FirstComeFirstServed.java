@@ -4,22 +4,21 @@ import java.util.Queue;
 import java.util.List;
 
 public class FirstComeFirstServed extends Scheduler {
-    int numProcesses;
+
     Queue<Process> readyQueue = new PriorityQueue<>(new ProcessArrivalComparator());
     Queue<Process> waitingQueue = new PriorityQueue<>(new ProcessArrivalComparator());
 
 
     public FirstComeFirstServed(List<Process> processes, CPU Cpu) {
         super(Cpu);
-        numProcesses = processes.size();
         readyQueue.addAll(processes);
     }
 
     public void schedule() {
-        System.out.println("********** First Come First Served ********");
+        System.out.println("\n********** First Come First Served ********");
 
-        while (CPU.clock < 100) {
-            System.out.println("\n---------- @ time " + CPU.clock + " ----------");
+        while (CPU.clock < 150) {
+            System.out.println("---------- @ time " + CPU.clock + " ----------");
             try {
                 Thread.sleep(CPU.clockSpeed);
             } catch (InterruptedException e) {
@@ -35,9 +34,12 @@ public class FirstComeFirstServed extends Scheduler {
             while (!readyQueue.isEmpty() && readyQueue.peek().getArrivalTime() == CPU.clock) {
                 if (Cpu.getNextFreeCore() != null) {
                     Cpu.getNextFreeCore().addProcess(readyQueue.remove(), CPU.clock);
-                } else waitingQueue.add(readyQueue.remove());
+                } else {
+                    Process delayedProcess = readyQueue.remove();
+                    delayedProcess.setDelay(CPU.clock-delayedProcess.getArrivalTime());
+                    waitingQueue.add(delayedProcess);
+                }
             }
-
             CPU.clock++;
         }
     }
