@@ -32,7 +32,7 @@ public class CPU {
 
     public void updateStateOfCores(int clock) {
         for(Core c : cores) {
-            c.processHasIO(clock);
+            //c.processHasIO(clock);
             c.processIsComplete(clock);
         }
 
