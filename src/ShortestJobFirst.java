@@ -40,7 +40,7 @@ public class ShortestJobFirst extends Scheduler {
         System.out.println("\n********** Shortest Job First ********");
 
         while (CPU.clock < CPU.timeLimit) {
-            System.out.println("---------- @ time " + CPU.clock + " ----------");
+            System.out.println("---------- @ time sec " + CPU.clock + " ----------");
             try {
                 Thread.sleep(CPU.clockSpeed);
             } catch (InterruptedException e) {

@@ -22,10 +22,10 @@ public class SchedulerSimulator {
 
         CPU Cpu = new CPU(numOfCores);
 
-        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
-        FCFS.schedule();
-//        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
+//        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
+//        FCFS.schedule();
+        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
 //        CPU.clock = 0;
-//        SJF.schedule();
+        SJF.schedule();
     }
 }
