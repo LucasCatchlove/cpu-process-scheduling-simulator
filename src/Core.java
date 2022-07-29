@@ -24,7 +24,6 @@ public class Core {
                 " | execution time: " + currentProcess.getExecTime() +
                 " | arrival time: " + currentProcess.getArrivalTime() +
                 " | I/O: " + currentProcess.getIORequests() + " ]");
-
     }
 
 
@@ -38,11 +37,17 @@ public class Core {
     }
 
     public void processIsComplete(int clock, int timeQ) {
-
+        if ((currentProcess != null && clock >= startTime + currentProcess.getExecTime() + currentProcess.getNumRequests() * 2) && !currentProcess.isWaitingForIO()) {
+            System.out.println("-> Process " + currentProcess.getPid() +
+                    " on core " + id + " has completed");
+            isAssignedProcess = false;
+            currentProcess = null;
+        }
     }
 
-    public void processHasIO(int clock) {
+    public void IOScheduler(int clock) {
         if (currentProcess != null) {
+            //terminate IO process and then begin the next if there was one waiting
             if (currentProcess.getCurrentIORequestStartTime() != -1 && clock == currentProcess.getCurrentIORequestStartTime() + 2) {
 
                 currentProcess.setWaitingForIO(false);
@@ -62,6 +67,7 @@ public class Core {
                     currentProcess.setNextIORequest();
                 }
             }
+            //if there is an IO request scheduled for the current time and the cpu isn't waiting on another, begin it
             if (currentProcess.getNumRequests() > 0 && currentProcess.getCurrentIORequest() < (currentProcess.getNumRequests())) {
                 if (clock == startTime + currentProcess.getIORequests().get(currentProcess.getCurrentIORequest())) {
 

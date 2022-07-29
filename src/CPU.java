@@ -32,9 +32,11 @@ public class CPU {
 
     public void updateStateOfCores(int clock) {
         for(Core c : cores) {
-            c.processHasIO(clock);
+            c.IOScheduler(clock);
             c.processIsComplete(clock);
+
         }
+
 
     }
 }

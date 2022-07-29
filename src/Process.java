@@ -17,13 +17,18 @@ public class Process {
 
     private int currentIORequestStartTime = -1;
 
+    private int timeRemaining;
+    private int timeElapsed;
+
     public Process(String pid, int arrivalTime, int execTime, List<Integer> IORequests) {
         this.pid = pid;
         this.arrivalTime = arrivalTime;
         this.IORequests = IORequests;
         this.execTime = execTime;
+        this.timeRemaining = execTime;
         this.numRequests = IORequests.size();
     }
+
 
     public int getExecTime() {
         return execTime;
@@ -91,6 +96,22 @@ public class Process {
 
     public void setHasWaitingRequest(boolean hasWaitingRequest) {
         this.hasWaitingRequest = hasWaitingRequest;
+    }
+
+    public int getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(int timeRemaining) {
+        this.timeRemaining = timeRemaining;
+    }
+
+    public int getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public void setTimeElapsed(int timeElapsed) {
+        this.timeElapsed = timeElapsed;
     }
 
     @Override

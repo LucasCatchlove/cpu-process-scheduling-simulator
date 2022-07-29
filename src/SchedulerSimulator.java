@@ -9,7 +9,7 @@ public class SchedulerSimulator {
         Scanner kb = new Scanner(System.in);
         //System.out.print("Enter a time quantum value: ");
         //int timeQ = kb.nextInt();
-        int timeQ = 2;
+        int timeQ = 4;
         try {
             FileProcessor.parseFile("input.txt");
         } catch (IOException e) {
@@ -24,8 +24,10 @@ public class SchedulerSimulator {
 
 //        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
 //        FCFS.schedule();
-        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
+//        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
 //        CPU.clock = 0;
-        SJF.schedule();
+//        SJF.schedule();
+        Scheduler RR = new RoundRobin(processes, Cpu, timeQ);
+        RR.schedule();
     }
 }

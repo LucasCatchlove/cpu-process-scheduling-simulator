@@ -23,17 +23,6 @@ public class ShortestJobFirst extends Scheduler {
     public ShortestJobFirst(List<Process> processes, CPU Cpu) {
         super(Cpu);
         readyQueue.addAll(processes);
-
-//        waitingQueue.addAll(processes);
-//        for(int i =0; i < readyQueue.size(); ++i)
-//            System.out.print(waitingQueue.remove());
-//
-//        for(int i =0; i < readyQueue.size(); ++i)
-//            System.out.print(readyQueue.remove());
-
-
-
-
     }
 
     public void schedule() {
