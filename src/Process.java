@@ -15,7 +15,7 @@ public class Process {
     private boolean hasWaitingRequest = false;
     private int waitingIORequest = 0;
 
-    private int currentIORequestStartTime = 0;
+    private int currentIORequestStartTime = -1;
 
     public Process(String pid, int arrivalTime, int execTime, List<Integer> IORequests) {
         this.pid = pid;
