@@ -17,13 +17,14 @@ public class FirstComeFirstServed extends Scheduler {
     public void schedule() {
         System.out.println("\n********** First Come First Served ********");
 
-        while (CPU.clock < 150) {
+        while (CPU.clock < CPU.timeLimit) {
             System.out.println("---------- @ time " + CPU.clock + " ----------");
             try {
                 Thread.sleep(CPU.clockSpeed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            //manages print statements as well to signal events like IO completion
             if (CPU.clock > 0) Cpu.updateStateOfCores(CPU.clock);
 
             while (!waitingQueue.isEmpty())

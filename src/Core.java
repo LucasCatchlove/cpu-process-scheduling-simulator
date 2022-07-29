@@ -11,7 +11,6 @@ public class Core {
     }
 
 
-
     public boolean isAssignedProcess() {
         return isAssignedProcess;
     }
@@ -29,49 +28,66 @@ public class Core {
     }
 
 
-
     public void processIsComplete(int clock) {
-//        for(int requestStartTime : currentProcess.getIORequests()) {
-//            if(startTime + currentProcess.getExecTime() < startTime + requestStartTime + 2) {
-//                System.out.println("-> IO started at time " + requestStartTime +
-//                        " on Process " + currentProcess.getPid() +
-//                        " on core " + id + " has completed");
-//                System.out.println("-> Process " + currentProcess.getPid() +
-//                        " on core " + id + " has completed");
-//            }
-//
-//        }
-        if(currentProcess != null && clock == startTime + currentProcess.getExecTime() /*+ currentProcess.getNumRequests()*2*/) {
+        if ((currentProcess != null && clock >= startTime + currentProcess.getExecTime() + currentProcess.getNumRequests() * 2) && !currentProcess.isWaitingForIO()) {
             System.out.println("-> Process " + currentProcess.getPid() +
-                               " on core " + id + " has completed");
+                    " on core " + id + " has completed");
             isAssignedProcess = false;
             currentProcess = null;
         }
     }
 
-//    public void processHasIO(int clock) {
-//        if(currentProcess != null && currentProcess.getNumRequests() > 0 && currentProcess.getCurrentIORequest() < (currentProcess.getNumRequests())) {
-//
-//            while(clock == startTime + currentProcess.getIORequests().get(currentProcess.getCurrentIORequest())) {
-//                System.out.println("-> Process " + currentProcess.getPid() + " on core " + id + " waiting for IO");
-//                if(currentProcess.getCurrentIORequest() == currentProcess.getNumRequests() - 1) break;
-//                currentProcess.setNextIORequest();
-//            }
-//            for(int reqTime : currentProcess.getIORequests()) {
-//                if(clock == startTime + reqTime + 2)
-//                System.out.println("-> IO started at time " + reqTime +
-//                " on Process " + currentProcess.getPid() +
-//                " on core " + id + " has completed");
-//            }
-//
-//
-//        }
-//    }
+    public void processIsComplete(int clock, int timeQ) {
 
+    }
+
+    public void processHasIO(int clock) {
+        if (currentProcess != null) {
+            if (currentProcess.getNumRequests() >= 0 && currentProcess.getCurrentIORequest() < (currentProcess.getNumRequests())) {
+                System.out.println("current curr: " + currentProcess.getCurrentIORequest());
+                if (clock == startTime + currentProcess.getIORequests().get(currentProcess.getCurrentIORequest())) {
+
+                     if (!currentProcess.isWaitingForIO()) {
+                        currentProcess.setCurrentIORequestStartTime(clock);
+                        currentProcess.setWaitingForIO(true);
+                        System.out.println("-> Process " + currentProcess.getPid() + " on core " + id + " waiting for IO");
+                        currentProcess.setNextIORequest();
+                        System.out.println(currentProcess.getCurrentIORequest());
+                    } else{
+                        currentProcess.setWaitingIORequest(currentProcess.getCurrentIORequest());
+                        currentProcess.setHasWaitingRequest(true);
+                    }
+                }
+            }
+            //cancelling IO
+            if (clock == currentProcess.getCurrentIORequestStartTime() + 2) {
+
+                currentProcess.setWaitingForIO(false);
+
+                System.out.println("-> IO " + (currentProcess.getCurrentIORequest()) +
+                        "/" + currentProcess.getNumRequests() +
+                        " started at time " + currentProcess.getCurrentIORequestStartTime() +
+                        " on Process " + currentProcess.getPid() +
+                        " on core " + id + " has completed");
+
+
+                if(currentProcess.hasWaitingRequest()) {
+                    System.out.println("-> Process " + currentProcess.getPid() + " on core " + id + " waiting for IO");
+                    currentProcess.setCurrentIORequestStartTime(clock);
+                    currentProcess.setWaitingForIO(true);
+                    currentProcess.setHasWaitingRequest(false);
+                    currentProcess.setNextIORequest();
+                }
+
+            }
+        }
+
+    }
 
 
     public int getId() {
         return id;
     }
+
 
 }

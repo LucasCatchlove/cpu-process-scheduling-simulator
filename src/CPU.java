@@ -3,7 +3,8 @@ public class CPU {
     private int numOfCores;
     private Core[] cores;
     static int clock;
-    static int clockSpeed = 10;
+    static int clockSpeed = 1;
+    static int timeLimit = 75;
 
     public CPU(int numOfCores) {
         cores = new Core[numOfCores];
@@ -31,8 +32,8 @@ public class CPU {
 
     public void updateStateOfCores(int clock) {
         for(Core c : cores) {
+            c.processHasIO(clock);
             c.processIsComplete(clock);
-            //c.processHasIO(clock);
         }
 
     }
