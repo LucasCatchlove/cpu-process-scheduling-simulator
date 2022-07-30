@@ -9,6 +9,8 @@ public class Core {
     private Scheduler scheduler;
     private int timeElapsed = 0;
 
+    private int cpuUtilization = 0;
+
     public Core(int id) {
         this.id = id;
     }
@@ -21,6 +23,7 @@ public class Core {
                 " assigned process [ " + currentProcess.getPid() +
                 " | execution time: " + currentProcess.getExecTime() +
                 " | arrival time: " + currentProcess.getArrivalTime() +
+                " | remaining time: " + currentProcess.getTimeRemaining() +
                 " | I/O: " + currentProcess.getIORequests() + " ]");
     }
 
@@ -30,6 +33,7 @@ public class Core {
             System.out.println("-> Process " + currentProcess.getPid() +
                     " on core " + id + " has completed");
             isAssignedProcess = false;
+            cpuUtilization += clock-startTime;
             currentProcess = null;
         }
     }
@@ -37,31 +41,29 @@ public class Core {
 
     public Process removeCompletedProcess(int clock, int timeQ) {
         if (currentProcess != null) {
-            currentProcess.decrTimeRemaining();
             timeElapsed++;
-            if (timeElapsed == timeQ) {
-                System.out.println(currentProcess.getTimeRemaining());
+            currentProcess.decrTimeRemaining();
+
                 if(currentProcess.getTimeRemaining() == 0) {
                     System.out.println("-> Process " + currentProcess.getPid() +
                             " on core " + id + " has completed");
-                }
-                else {
-                    currentProcess.decrTimeRemaining();
-                    System.out.println("-> Process " + currentProcess.getPid() +
-                            " on core " + id + " has used up allotted cpu time. Placing Process back in queue");
                     timeElapsed = 0;
-                    return currentProcess;
+                    isAssignedProcess = false;
+                    cpuUtilization += clock-startTime;
+                    currentProcess = null;
                 }
-                timeElapsed = 0;
-                isAssignedProcess = false;
-                currentProcess = null;
+                else if (timeElapsed == timeQ)  {
+
+                    System.out.println("-> Process " + currentProcess.getPid() +
+                            " on core " + id + " has used up allotted cpu time (" + currentProcess.getTimeRemaining() + " remaining). Placing Process back in queue");
+                    Process temp = currentProcess;
+                    currentProcess = null;
+                    timeElapsed = 0;
+                    cpuUtilization += clock-startTime;
+                    isAssignedProcess = false;
+                    return temp;
+                }
             }
-            else {
-
-            }
-
-
-        }
         return null;
     }
 
@@ -121,5 +123,11 @@ public class Core {
         return currentProcess;
     }
 
+    public void setCurrentProcess(Process p) {
+        currentProcess = p;
+    }
 
+    public int getCpuUtilization() {
+        return cpuUtilization;
+    }
 }

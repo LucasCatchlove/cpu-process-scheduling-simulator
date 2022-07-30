@@ -22,12 +22,15 @@ public class SchedulerSimulator {
 
         CPU Cpu = new CPU(numOfCores);
 
-//        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
-//        FCFS.schedule();
-//        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
-       CPU.clock = 0;
-//        SJF.schedule();
+        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
+        FCFS.schedule();
+        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
+        SJF.schedule();
         Scheduler RR = new RoundRobin(processes, Cpu, timeQ);
         RR.schedule();
+        for(Core c : Cpu.getCores()) {
+            System.out.println("Core " + c.getId() + " was used for " + ((c.getCpuUtilization() / (float)CPU.clock) * 100) + "%");
+
+        }
     }
 }
