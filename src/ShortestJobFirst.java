@@ -35,7 +35,14 @@ public class ShortestJobFirst extends Scheduler {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (CPU.clock > 0) Cpu.updateStateOfCores(CPU.clock);
+
+            if (CPU.clock > 0) {
+                for(Core c : Cpu.getCores()) {
+                    c.IOScheduler(CPU.clock);
+                    c.removeCompletedProcess(CPU.clock);
+                }
+
+            }
 
             while (!waitingQueue.isEmpty())
                 if (Cpu.getNextFreeCore() != null)

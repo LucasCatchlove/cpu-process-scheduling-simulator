@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 
-public class Process {
+public class Process{
     private final String pid;
     private final int arrivalTime;
     private final int execTime;
@@ -18,7 +18,7 @@ public class Process {
     private int currentIORequestStartTime = -1;
 
     private int timeRemaining;
-    private int timeElapsed;
+
 
     public Process(String pid, int arrivalTime, int execTime, List<Integer> IORequests) {
         this.pid = pid;
@@ -101,18 +101,11 @@ public class Process {
     public int getTimeRemaining() {
         return timeRemaining;
     }
-
-    public void setTimeRemaining(int timeRemaining) {
-        this.timeRemaining = timeRemaining;
+    public void decrTimeRemaining() {
+        if(timeRemaining > 0) this.timeRemaining--;
     }
 
-    public int getTimeElapsed() {
-        return timeElapsed;
-    }
 
-    public void setTimeElapsed(int timeElapsed) {
-        this.timeElapsed = timeElapsed;
-    }
 
     @Override
     public String toString() {
@@ -121,4 +114,6 @@ public class Process {
                 ", execTime=" + execTime +
                 '}';
     }
+
+
 }

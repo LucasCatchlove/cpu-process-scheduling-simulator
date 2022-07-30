@@ -25,7 +25,7 @@ public class SchedulerSimulator {
 //        Scheduler FCFS = new FirstComeFirstServed(processes, Cpu);
 //        FCFS.schedule();
 //        Scheduler SJF = new ShortestJobFirst(processes, Cpu);
-//        CPU.clock = 0;
+       CPU.clock = 0;
 //        SJF.schedule();
         Scheduler RR = new RoundRobin(processes, Cpu, timeQ);
         RR.schedule();

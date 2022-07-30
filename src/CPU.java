@@ -1,18 +1,18 @@
 public class CPU {
-
-    private int numOfCores;
     private Core[] cores;
     static int clock;
     static int clockSpeed = 1;
     static int timeLimit = 75;
 
+
+
+
     public CPU(int numOfCores) {
         cores = new Core[numOfCores];
         for (int i = 0; i < numOfCores; ++i)
             cores[i] = new Core(i);
+
     }
-
-
 
     public Core getNextFreeCore() {
         for (Core c : cores)
@@ -30,13 +30,10 @@ public class CPU {
 
     }
 
-    public void updateStateOfCores(int clock) {
-        for(Core c : cores) {
-            c.IOScheduler(clock);
-            c.processIsComplete(clock);
 
-        }
-
-
+    public Core[] getCores() {
+        return cores;
     }
+
+
 }

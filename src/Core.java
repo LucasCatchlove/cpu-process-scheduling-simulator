@@ -6,13 +6,11 @@ public class Core {
     private int startTime;
     private int id;
 
+    private Scheduler scheduler;
+    private int timeElapsed = 0;
+
     public Core(int id) {
         this.id = id;
-    }
-
-
-    public boolean isAssignedProcess() {
-        return isAssignedProcess;
     }
 
     public void addProcess(Process p, int clock) {
@@ -27,7 +25,7 @@ public class Core {
     }
 
 
-    public void processIsComplete(int clock) {
+    public void removeCompletedProcess(int clock) {
         if ((currentProcess != null && clock >= startTime + currentProcess.getExecTime() + currentProcess.getNumRequests() * 2) && !currentProcess.isWaitingForIO()) {
             System.out.println("-> Process " + currentProcess.getPid() +
                     " on core " + id + " has completed");
@@ -36,14 +34,37 @@ public class Core {
         }
     }
 
-    public void processIsComplete(int clock, int timeQ) {
-        if ((currentProcess != null && clock >= startTime + currentProcess.getExecTime() + currentProcess.getNumRequests() * 2) && !currentProcess.isWaitingForIO()) {
-            System.out.println("-> Process " + currentProcess.getPid() +
-                    " on core " + id + " has completed");
-            isAssignedProcess = false;
-            currentProcess = null;
+
+    public Process removeCompletedProcess(int clock, int timeQ) {
+        if (currentProcess != null) {
+            currentProcess.decrTimeRemaining();
+            timeElapsed++;
+            if (timeElapsed == timeQ) {
+                System.out.println(currentProcess.getTimeRemaining());
+                if(currentProcess.getTimeRemaining() == 0) {
+                    System.out.println("-> Process " + currentProcess.getPid() +
+                            " on core " + id + " has completed");
+                }
+                else {
+                    currentProcess.decrTimeRemaining();
+                    System.out.println("-> Process " + currentProcess.getPid() +
+                            " on core " + id + " has used up allotted cpu time. Placing Process back in queue");
+                    timeElapsed = 0;
+                    return currentProcess;
+                }
+                timeElapsed = 0;
+                isAssignedProcess = false;
+                currentProcess = null;
+            }
+            else {
+
+            }
+
+
         }
+        return null;
     }
+
 
     public void IOScheduler(int clock) {
         if (currentProcess != null) {
@@ -56,10 +77,10 @@ public class Core {
                         " on Process " + currentProcess.getPid() +
                         " on core " + id + " has completed");
 
-                if(currentProcess.hasWaitingRequest()) {
+                if (currentProcess.hasWaitingRequest()) {
                     System.out.println("-> Process " + currentProcess.getPid() +
                             " on core " + id +
-                            " waiting for IO #" + (currentProcess.getCurrentIORequest()+1) +
+                            " waiting for IO #" + (currentProcess.getCurrentIORequest() + 1) +
                             " (request was delayed)");
                     currentProcess.setCurrentIORequestStartTime(clock);
                     currentProcess.setWaitingForIO(true);
@@ -71,14 +92,14 @@ public class Core {
             if (currentProcess.getNumRequests() > 0 && currentProcess.getCurrentIORequest() < (currentProcess.getNumRequests())) {
                 if (clock == startTime + currentProcess.getIORequests().get(currentProcess.getCurrentIORequest())) {
 
-                     if (!currentProcess.isWaitingForIO()) {
+                    if (!currentProcess.isWaitingForIO()) {
                         currentProcess.setCurrentIORequestStartTime(clock);
                         currentProcess.setWaitingForIO(true);
                         System.out.println("-> Process " + currentProcess.getPid() +
                                 " on core " + id +
-                                " waiting for IO #" + (currentProcess.getCurrentIORequest()+1));
+                                " waiting for IO #" + (currentProcess.getCurrentIORequest() + 1));
                         currentProcess.setNextIORequest();
-                    } else{
+                    } else {
                         currentProcess.setWaitingIORequest(currentProcess.getCurrentIORequest());
                         currentProcess.setHasWaitingRequest(true);
                     }
@@ -88,9 +109,16 @@ public class Core {
 
     }
 
+    public boolean isAssignedProcess() {
+        return isAssignedProcess;
+    }
 
     public int getId() {
         return id;
+    }
+
+    public Process getCurrentProcess() {
+        return currentProcess;
     }
 
 

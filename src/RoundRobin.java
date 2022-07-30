@@ -1,20 +1,17 @@
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class RoundRobin extends Scheduler {
 
-    Queue<Process> readyQueue = new PriorityQueue<>();
-    Queue<Process> waitingQueue = new PriorityQueue<>(new ProcessArrivalComparator());
+    Queue<Process> readyQueue = new LinkedList<>();
+    Queue<Process> waitingQueue = new LinkedList<>();
     private final int timeQ;
 
 
-    public RoundRobin(List<Process> processes, CPU Cpu, int q) {
+    public RoundRobin(List<Process> processes, CPU Cpu, int timeQ) {
         super(Cpu);
         processes.sort(new ProcessArrivalComparator());
         readyQueue.addAll(processes);
-        timeQ = q;
+        this.timeQ = timeQ;
     }
 
     public void schedule() {
@@ -29,10 +26,15 @@ public class RoundRobin extends Scheduler {
             }
             //manages print statements as well to signal events like IO completion
             if (CPU.clock > 0) {
-                Cpu.updateStateOfCores(CPU.clock);
+
+                for(Core c : Cpu.getCores()) {
+                    //c.IOScheduler(CPU.clock);
+                    Process incomplete = c.removeCompletedProcess(CPU.clock, timeQ);
+                    if(incomplete != null)
+                        waitingQueue.add(incomplete);
+                }
 
             }
-
             while (!waitingQueue.isEmpty())
                 if (Cpu.getNextFreeCore() != null)
                     Cpu.getNextFreeCore().addProcess(waitingQueue.remove(), CPU.clock);
@@ -50,6 +52,7 @@ public class RoundRobin extends Scheduler {
             CPU.clock++;
         }
     }
+
 }
 
 

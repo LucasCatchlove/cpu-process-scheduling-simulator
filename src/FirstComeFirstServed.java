@@ -25,7 +25,12 @@ public class FirstComeFirstServed extends Scheduler {
                 e.printStackTrace();
             }
             //manages print statements as well to signal events like IO completion
-            if (CPU.clock > 0) Cpu.updateStateOfCores(CPU.clock);
+            if (CPU.clock > 0) {
+                for(Core c : Cpu.getCores()) {
+                    c.IOScheduler(CPU.clock);
+                    c.removeCompletedProcess(CPU.clock);
+                }
+            }
 
             while (!waitingQueue.isEmpty())
                 if (Cpu.getNextFreeCore() != null)
@@ -45,7 +50,6 @@ public class FirstComeFirstServed extends Scheduler {
         }
     }
 }
-
 
 
 
